@@ -1,0 +1,32 @@
+#kc-header-wrapper {
+    background-image: url(../img/logo-gruposc.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 260px;
+    height: 65px;
+    margin: 0 auto 10px;
+    color: transparent;
+    overflow: hidden;
+    text-indent: -9999px;
+}
+
+#kc-header {
+    text-align: center;
+}
+
+.login-pf body {
+    background-color: #f4f5f7;
+    position: relative;
+}
+
+.login-pf body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url(../img/logo-oncoprod.png) no-repeat center center;
+    background-size: 520px auto;
+    opacity: 0.07;
+    pointer-events: none;
+    z-index: 0;
+}

@@ -1,0 +1,139 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: #f4f5f7;
+  color: #1f2933;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.app-header-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.app-tabs button.active {
+  background-color: #1f6feb;
+  color: #fff;
+  border-color: #1f6feb;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  margin-bottom: 16px;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e4e7eb;
+  text-align: left;
+}
+
+input[type="number"] {
+  width: 70px;
+  padding: 4px 6px;
+}
+
+button {
+  box-sizing: border-box;
+  font: inherit;
+  height: 38px;
+  padding: 0 16px;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #1f2933;
+  cursor: pointer;
+  line-height: 1;
+}
+
+button:disabled {
+  background-color: #f4f5f7;
+  color: #9aa5b1;
+  border-color: #e4e7eb;
+  cursor: not-allowed;
+}
+
+.order-form button[type="submit"] {
+  margin-top: 16px;
+  padding: 0 20px;
+  background-color: #1f6feb;
+  color: #fff;
+  border-color: #1f6feb;
+}
+
+.order-form button[type="submit"]:disabled {
+  background-color: #9aa5b1;
+  border-color: #9aa5b1;
+  color: #fff;
+}
+
+.error-message {
+  color: #cf222e;
+  margin-top: 8px;
+}
+
+.success-message {
+  color: #1a7f37;
+  margin-top: 8px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 8px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-pending {
+  background-color: #fff8c5;
+  color: #7d5a00;
+}
+
+.status-processing {
+  background-color: #ddf4ff;
+  color: #0969da;
+}
+
+.status-completed {
+  background-color: #dafbe1;
+  color: #1a7f37;
+}
+
+.status-failed {
+  background-color: #ffebe9;
+  color: #cf222e;
+}

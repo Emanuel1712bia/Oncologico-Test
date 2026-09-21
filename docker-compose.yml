@@ -1,0 +1,87 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: orderprocessing
+      POSTGRES_USER: orderprocessing
+      POSTGRES_PASSWORD: orderprocessing
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orderprocessing -d orderprocessing"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: "8081"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_BACKCHANNEL_DYNAMIC: "true"
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./deploy/keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+      - ./deploy/keycloak/themes/gruposc:/opt/keycloak/themes/gruposc:ro
+
+  migrator:
+    build:
+      context: ./backend
+      dockerfile: database/Migrator/Dockerfile
+    environment:
+      POSTGRES_CONNECTION_STRING: "Host=postgres;Port=5432;Database=orderprocessing;Username=orderprocessing;Password=orderprocessing"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: src/OrderProcessing.Api/Dockerfile
+    ports:
+      - "5080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+      keycloak:
+        condition: service_started
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: src/OrderProcessing.Worker/Dockerfile
+    environment:
+      DOTNET_ENVIRONMENT: Production
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE_URL: "http://localhost:5080"
+      VITE_KEYCLOAK_URL: "http://localhost:8081"
+      VITE_KEYCLOAK_REALM: "order-processing"
+      VITE_KEYCLOAK_CLIENT_ID: "order-processing-web"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
